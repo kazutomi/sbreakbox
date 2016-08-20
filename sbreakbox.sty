@@ -13,10 +13,15 @@
 \def\sbreakboxskip{2pt}
 \def\sbreakboxparindent{1.8em}
 
+\newdimen\sbreakboxrule
+\sbreakboxrule=0.4pt
+\newdimen\sbreakboxsep
+\sbreakboxsep=3pt
+
 \def\sbreakbox{\vskip\sbreakboxskip\relax
 \setbox\sbk@bxb\vbox\bgroup
-\advance\linewidth -2\fboxrule
-\advance\linewidth -2\fboxsep
+\advance\linewidth -2\sbreakboxrule
+\advance\linewidth -2\sbreakboxsep
 \hsize\linewidth\@parboxrestore
 \parindent\sbreakboxparindent\relax}
 
@@ -31,15 +36,14 @@
 \advance\@tempdimb-\ht\@tempboxa 
 \advance\@tempdimb-\dp\@tempboxa}% gap between two boxes
  
-
-% \@tempdima: height of the first line (\sbk@bxa) + fboxsep
+% \@tempdima: height of the first line (\sbk@bxa) + sbreakboxsep
 \def\sbk@addfsepht{%
-     \setbox\sbk@bxa\vbox{\vskip\fboxsep\box\sbk@bxa}}
+     \setbox\sbk@bxa\vbox{\vskip\sbreakboxsep\box\sbk@bxa}}
 
-% \@tempdima: depth of the first line (\sbk@bxa) + fboxsep
+% \@tempdima: depth of the first line (\sbk@bxa) + sbreakboxsep
 \def\sbk@addfsepdp{%
      \@tempdima\dp\sbk@bxa
-     \advance\@tempdima\fboxsep
+     \advance\@tempdima\sbreakboxsep
      \dp\sbk@bxa\@tempdima}
 
 % \@tempdima: depth of the first line (\sbk@bxa) + vertical skip
@@ -50,9 +54,9 @@
 
 \def\sbk@line{%
     \hbox to \linewidth{\ifsbkcount\smash{\llap{\the\sbk@lcnt\ }}\fi
-    \vrule \@width\fboxrule\hskip\fboxsep
+    \vrule \@width\sbreakboxrule\hskip\sbreakboxsep
     \box\sbk@bxa\hfil
-    \hskip\fboxsep\vrule \@width\fboxrule}}
+    \hskip\sbreakboxsep\vrule \@width\sbreakboxrule}}
 
 \def\endsbreakbox{\egroup
 \ifhmode\par\fi{\noindent\sbk@lcnt\@ne 
@@ -61,15 +65,15 @@
 \sbk@split\sbk@addfsepht\sbk@addskipdp
 \ifvoid\sbk@bxb      % Only one line
 \def\sbk@fstln{\sbk@addfsepdp
-\vbox{\hrule\@height\fboxrule\sbk@line\hrule\@height\fboxrule}}%
+\vbox{\hrule\@height\sbreakboxrule\sbk@line\hrule\@height\sbreakboxrule}}%
 \else               % More than one line
-\def\sbk@fstln{\vbox{\hrule\@height\fboxrule\sbk@line}\hfil
+\def\sbk@fstln{\vbox{\hrule\@height\sbreakboxrule\sbk@line}\hfil
 \advance\sbk@lcnt\@ne
 \loop 
  \sbk@split\sbk@addskipdp\leavevmode
 \ifvoid\sbk@bxb      % The last line
  \@sbkcontfalse\sbk@addfsepdp
- \vtop{\sbk@line\hrule\@height\fboxrule}%
+ \vtop{\sbk@line\hrule\@height\sbreakboxrule}%
 \else               % 2,...,(n-1)
  \sbk@line
 \fi
