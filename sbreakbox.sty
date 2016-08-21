@@ -84,8 +84,12 @@
  \@sbkcontfalse\sbk@addfsepdp
  \vtop{\sbk@line\hrule\@height\sbreakboxrule}%
 \else               % 2,...,(n-1)
- \ifsbk@addedtopsep\else\sbk@addfsepht\sbk@addedtopseptrue\fi
- \sbk@line
+  \ifsbk@addedtopsep % 表示する2行目以降
+    \sbk@line
+  \else % 1行目を表示：上を開けて横線をつける
+    \sbk@addfsepht\sbk@addedtopseptrue
+    \vbox{\hrule\@height\sbreakboxrule\sbk@line}\hfil
+  \fi
 \fi
  \hfil\advance\sbk@lcnt\@ne
 \if@sbkcont\repeat}%
