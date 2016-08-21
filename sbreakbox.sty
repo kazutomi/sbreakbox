@@ -4,82 +4,81 @@
 % sbreakbox.sty customized for Kazuto Tominaga, 2016
 % Date: Aug 20, 2016
 
-\newbox\bk@bxb
-\newbox\bk@bxa
-\newif\if@bkcont 
-\newif\ifbkcount
-\newcount\bk@lcnt
+\newbox\sbk@bxb
+\newbox\sbk@bxa
+\newif\if@sbkcont 
+\newif\ifsbkcount
+\newcount\sbk@lcnt
 
-\def\breakboxskip{2pt}
-\def\breakboxparindent{1.8em}
+\def\sbreakboxskip{2pt}
+\def\sbreakboxparindent{1.8em}
 
-\def\breakbox{\vskip\breakboxskip\relax
-\setbox\bk@bxb\vbox\bgroup
+\def\sbreakbox{\vskip\sbreakboxskip\relax
+\setbox\sbk@bxb\vbox\bgroup
 \advance\linewidth -2\fboxrule
 \advance\linewidth -2\fboxsep
 \hsize\linewidth\@parboxrestore
-\parindent\breakboxparindent\relax}
+\parindent\sbreakboxparindent\relax}
 
 % \@tempdimb: amount of vertical skip 
-% between the first line (\bk@bxa) and the rest (\bk@bxb)
-\def\bk@split{%
-\@tempdimb\ht\bk@bxb % height of original box
-\advance\@tempdimb\dp\bk@bxb 
-\setbox\bk@bxa\vsplit\bk@bxb to\z@ % split it
-\setbox\bk@bxa\vbox{\unvbox\bk@bxa}% recover height & depth of \bk@bxa
-\setbox\@tempboxa\vbox{\copy\bk@bxa\copy\bk@bxb}% naive concatenation
+% between the first line (\sbk@bxa) and the rest (\sbk@bxb)
+\def\sbk@split{%
+\@tempdimb\ht\sbk@bxb % height of original box
+\advance\@tempdimb\dp\sbk@bxb 
+\setbox\sbk@bxa\vsplit\sbk@bxb to\z@ % split it
+\setbox\sbk@bxa\vbox{\unvbox\sbk@bxa}% recover height & depth of \sbk@bxa
+\setbox\@tempboxa\vbox{\copy\sbk@bxa\copy\sbk@bxb}% naive concatenation
 \advance\@tempdimb-\ht\@tempboxa 
 \advance\@tempdimb-\dp\@tempboxa}% gap between two boxes
  
 
-% \@tempdima: height of the first line (\bk@bxa) + fboxsep
-\def\bk@addfsepht{%
-     \setbox\bk@bxa\vbox{\vskip\fboxsep\box\bk@bxa}}
+% \@tempdima: height of the first line (\sbk@bxa) + fboxsep
+\def\sbk@addfsepht{%
+     \setbox\sbk@bxa\vbox{\vskip\fboxsep\box\sbk@bxa}}
 
-\def\bk@addskipht{%
-     \setbox\bk@bxa\vbox{\vskip\@tempdimb\box\bk@bxa}}
+\def\sbk@addskipht{%
+     \setbox\sbk@bxa\vbox{\vskip\@tempdimb\box\sbk@bxa}}
 
-% \@tempdima: depth of the first line (\bk@bxa) + fboxsep
-\def\bk@addfsepdp{%
-     \@tempdima\dp\bk@bxa
+% \@tempdima: depth of the first line (\sbk@bxa) + fboxsep
+\def\sbk@addfsepdp{%
+     \@tempdima\dp\sbk@bxa
      \advance\@tempdima\fboxsep
-     \dp\bk@bxa\@tempdima}
+     \dp\sbk@bxa\@tempdima}
 
-% \@tempdima: depth of the first line (\bk@bxa) + vertical skip
-\def\bk@addskipdp{%
-     \@tempdima\dp\bk@bxa
+% \@tempdima: depth of the first line (\sbk@bxa) + vertical skip
+\def\sbk@addskipdp{%
+     \@tempdima\dp\sbk@bxa
      \advance\@tempdima\@tempdimb
-     \dp\bk@bxa\@tempdima}
+     \dp\sbk@bxa\@tempdima}
 
-\def\bk@line{%
-    \hbox to \linewidth{\ifbkcount\smash{\llap{\the\bk@lcnt\ }}\fi
+\def\sbk@line{%
+    \hbox to \linewidth{\ifsbkcount\smash{\llap{\the\sbk@lcnt\ }}\fi
     \vrule \@width\fboxrule\hskip\fboxsep
-    \box\bk@bxa\hfil
+    \box\sbk@bxa\hfil
     \hskip\fboxsep\vrule \@width\fboxrule}}
 
-\def\endbreakbox{\egroup
-\ifhmode\par\fi{\noindent\bk@lcnt\@ne 
-\@bkconttrue\baselineskip\z@\lineskiplimit\z@
+\def\endsbreakbox{\egroup
+\ifhmode\par\fi{\noindent\sbk@lcnt\@ne 
+\@sbkconttrue\baselineskip\z@\lineskiplimit\z@
 \lineskip\z@\vfuzz\maxdimen
-\bk@split\bk@addfsepht\bk@addskipdp
-\ifvoid\bk@bxb      % Only one line
-\def\bk@fstln{\bk@addfsepdp
-\vbox{\hrule\@height\fboxrule\bk@line\hrule\@height\fboxrule}}%
+\sbk@split\sbk@addfsepht\sbk@addskipdp
+\ifvoid\sbk@bxb      % Only one line
+\def\sbk@fstln{\sbk@addfsepdp
+\vbox{\hrule\@height\fboxrule\sbk@line\hrule\@height\fboxrule}}%
 \else               % More than one line
-\def\bk@fstln{\vbox{\hrule\@height\fboxrule\bk@line}\hfil
-\advance\bk@lcnt\@ne
+\def\sbk@fstln{\vbox{\hrule\@height\fboxrule\sbk@line}\hfil
+\advance\sbk@lcnt\@ne
 \loop 
- \bk@split\bk@addskipdp\leavevmode
-\ifvoid\bk@bxb      % The last line
- \@bkcontfalse\bk@addfsepdp
- \vtop{\bk@line\hrule\@height\fboxrule}%
+ \sbk@split\sbk@addskipdp\leavevmode
+\ifvoid\sbk@bxb      % The last line
+ \@sbkcontfalse\sbk@addfsepdp
+ \vtop{\sbk@line\hrule\@height\fboxrule}%
 \else               % 2,...,(n-1)
- \bk@line
+ \sbk@line
 \fi
- \hfil\advance\bk@lcnt\@ne
-\if@bkcont\repeat}%
+ \hfil\advance\sbk@lcnt\@ne
+\if@sbkcont\repeat}%
 \fi
-\leavevmode\bk@fstln\par}\vskip\breakboxskip\relax}
+\leavevmode\sbk@fstln\par}\vskip\sbreakboxskip\relax}
 
-\bkcountfalse
-
+\sbkcountfalse
