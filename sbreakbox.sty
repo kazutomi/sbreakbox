@@ -81,8 +81,13 @@
 \loop 
  \sbk@split\sbk@addskipdp\leavevmode
 \ifvoid\sbk@bxb      % The last line
- \@sbkcontfalse\sbk@addfsepdp
- \vtop{\sbk@line\hrule\@height\sbreakboxrule}%
+  \@sbkcontfalse\sbk@addfsepdp
+  \ifsbk@addedtopsep % 上に1行以上ある
+    \vtop{\sbk@line\hrule\@height\sbreakboxrule}%
+  \else % verbatimやallttで内容がこの1行：上にも間を空けて線を引く
+    \sbk@addfsepht\sbk@addedtopseptrue
+    \vtop{\hrule\@height\sbreakboxrule\sbk@line\hrule\@height\sbreakboxrule}%
+  \fi
 \else               % 2,...,(n-1)
   \ifsbk@addedtopsep % 表示する2行目以降
     \sbk@line
