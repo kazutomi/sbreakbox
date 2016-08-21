@@ -17,13 +17,17 @@
 
 \newdimen\sbreakboxrule
 \sbreakboxrule=0.4pt
-\newdimen\sbreakboxsep
-\sbreakboxsep=3pt
+\newdimen\sbreakboxtsep % top padding
+\newdimen\sbreakboxssep % side paddings
+\newdimen\sbreakboxbsep % bottom padding
+\sbreakboxtsep=5pt
+\sbreakboxssep=6pt
+\sbreakboxbsep=5pt
 
 \def\sbreakbox{\vskip\sbreakboxskip\relax
 \setbox\sbk@bxb\vbox\bgroup
 \advance\linewidth -2\sbreakboxrule
-\advance\linewidth -2\sbreakboxsep
+\advance\linewidth -2\sbreakboxssep
 \hsize\linewidth\@parboxrestore
 \parindent\sbreakboxparindent\relax}
 
@@ -38,14 +42,14 @@
 \advance\@tempdimb-\ht\@tempboxa 
 \advance\@tempdimb-\dp\@tempboxa}% gap between two boxes
  
-% \@tempdima: height of the first line (\sbk@bxa) + sbreakboxsep
+% \@tempdima: height of the first line (\sbk@bxa) + sbreakboxtsep
 \def\sbk@addfsepht{%
-     \setbox\sbk@bxa\vbox{\vskip\sbreakboxsep\box\sbk@bxa}}
+     \setbox\sbk@bxa\vbox{\vskip\sbreakboxtsep\box\sbk@bxa}}
 
-% \@tempdima: depth of the first line (\sbk@bxa) + sbreakboxsep
+% \@tempdima: depth of the first line (\sbk@bxa) + sbreakboxbsep
 \def\sbk@addfsepdp{%
      \@tempdima\dp\sbk@bxa
-     \advance\@tempdima\sbreakboxsep
+     \advance\@tempdima\sbreakboxbsep
      \dp\sbk@bxa\@tempdima}
 
 % \@tempdima: depth of the first line (\sbk@bxa) + vertical skip
@@ -56,9 +60,9 @@
 
 \def\sbk@line{%
     \hbox to \linewidth{\ifsbkcount\smash{\llap{\the\sbk@lcnt\ }}\fi
-    \vrule \@width\sbreakboxrule\hskip\sbreakboxsep
+    \vrule \@width\sbreakboxrule\hskip\sbreakboxssep
     \box\sbk@bxa\hfil
-    \hskip\sbreakboxsep\vrule \@width\sbreakboxrule}}
+    \hskip\sbreakboxssep\vrule \@width\sbreakboxrule}}
 
 \def\endsbreakbox{\egroup
 \ifhmode\par\fi{\noindent\sbk@lcnt\@ne 
