@@ -9,19 +9,19 @@
 \newif\if@sbkcont 
 \newif\ifsbkcount
 \newcount\sbk@lcnt
-\sbkcountfalse % デフォルトは行番号なし
+\sbkcountfalse % No line numbers by default
 
-\newif\ifsbk@addedtopsep % ht 0ptの第1行を無視するためのフラグ
+\newif\ifsbk@addedtopsep % flag to ignore the first line with ht=0pt
 
 \def\sbreakboxskip{2pt}
 \def\sbreakboxparindent{1.8em}
 
-\newdimen\sbreakboxrule % 箱の線の太さ
+\newdimen\sbreakboxrule % width of rules
 \sbreakboxrule=0.4pt
-\newdimen\sbreakboxtsep % 上のアキ
-\newdimen\sbreakboxssep % 横のアキ
-\newdimen\sbreakboxbsep % 下のアキ
-% デフォルト値
+\newdimen\sbreakboxtsep % top padding
+\newdimen\sbreakboxssep % side paddings
+\newdimen\sbreakboxbsep % bottom padding
+% default values
 \sbreakboxtsep=5pt
 \sbreakboxssep=6pt
 \sbreakboxbsep=5pt
@@ -70,16 +70,16 @@
 \ifhmode\par\fi{\noindent\sbk@lcnt\@ne 
 \@sbkconttrue\baselineskip\z@\lineskiplimit\z@
 \lineskip\z@\vfuzz\maxdimen
-\sbk@addedtopsepfalse  % 一番上のアキをまだ開けてない
+\sbk@addedtopsepfalse  % turn off the flag (not yet added top padding)
 \sbk@split\sbk@addskipdp
 \ifvoid\sbk@bxb      % Only one line
 \def\sbk@fstln{\sbk@addfsepht\sbk@addfsepdp
 \vbox{\hrule\@height\sbreakboxrule\sbk@line\hrule\@height\sbreakboxrule}}%
 \else               % More than one line
 \def\sbk@fstln{%
-  \ifdim\ht\sbk@bxa=0pt % verbatimやallttでht=0ptが取れてくるのを無視
+  \ifdim\ht\sbk@bxa=0pt % ignore first box with ht=0 given by verbatim or alltt
   \else
-    \sbk@addfsepht % これは上のチェックの後でないといけない
+    \sbk@addfsepht % add this after the check above
     \sbk@addedtopseptrue
     \vbox{\hrule\@height\sbreakboxrule\sbk@line}\hfil
     \advance\sbk@lcnt\@ne
@@ -88,16 +88,16 @@
  \sbk@split\sbk@addskipdp\leavevmode
 \ifvoid\sbk@bxb      % The last line
   \@sbkcontfalse\sbk@addfsepdp
-  \ifsbk@addedtopsep % 上に1行以上ある
+  \ifsbk@addedtopsep % has displayed one or more lines above
     \vtop{\sbk@line\hrule\@height\sbreakboxrule}%
-  \else % verbatimやallttで内容がこの1行：上にも間を空けて線を引く
+  \else % one-line contents of verbatim or alltt; add top stuff as well
     \sbk@addfsepht\sbk@addedtopseptrue
     \vtop{\hrule\@height\sbreakboxrule\sbk@line\hrule\@height\sbreakboxrule}%
   \fi
 \else               % 2,...,(n-1)
-  \ifsbk@addedtopsep % 表示する2行目以降
+  \ifsbk@addedtopsep % has displayed one or more lines
     \sbk@line
-  \else % 1行目を表示：上を開けて横線をつける
+  \else % this is actually the first line to display; add top padding and a rule
     \sbk@addfsepht\sbk@addedtopseptrue
     \vbox{\hrule\@height\sbreakboxrule\sbk@line}\hfil
   \fi
