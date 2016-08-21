@@ -2,24 +2,26 @@
 % Date: May  28, 1993
 
 % sbreakbox.sty customized for Kazuto Tominaga, 2016
-% Date: Aug 20, 2016
+% Date: Aug 21, 2016
 
 \newbox\sbk@bxb
 \newbox\sbk@bxa
 \newif\if@sbkcont 
 \newif\ifsbkcount
 \newcount\sbk@lcnt
+\sbkcountfalse % デフォルトは行番号なし
 
-\newif\ifsbk@addedtopsep
+\newif\ifsbk@addedtopsep % ht 0ptの第1行を無視するためのフラグ
 
 \def\sbreakboxskip{2pt}
 \def\sbreakboxparindent{1.8em}
 
-\newdimen\sbreakboxrule
+\newdimen\sbreakboxrule % 箱の線の太さ
 \sbreakboxrule=0.4pt
-\newdimen\sbreakboxtsep % top padding
-\newdimen\sbreakboxssep % side paddings
-\newdimen\sbreakboxbsep % bottom padding
+\newdimen\sbreakboxtsep % 上のアキ
+\newdimen\sbreakboxssep % 横のアキ
+\newdimen\sbreakboxbsep % 下のアキ
+% デフォルト値
 \sbreakboxtsep=5pt
 \sbreakboxssep=6pt
 \sbreakboxbsep=5pt
@@ -104,5 +106,3 @@
 \if@sbkcont\repeat}%
 \fi
 \leavevmode\sbk@fstln\par}\vskip\sbreakboxskip\relax}
-
-\sbkcountfalse
