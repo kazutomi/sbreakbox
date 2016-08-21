@@ -10,6 +10,8 @@
 \newif\ifsbkcount
 \newcount\sbk@lcnt
 
+\newif\ifsbk@addedtopsep
+
 \def\sbreakboxskip{2pt}
 \def\sbreakboxparindent{1.8em}
 
@@ -62,19 +64,27 @@
 \ifhmode\par\fi{\noindent\sbk@lcnt\@ne 
 \@sbkconttrue\baselineskip\z@\lineskiplimit\z@
 \lineskip\z@\vfuzz\maxdimen
-\sbk@split\sbk@addfsepht\sbk@addskipdp
+\sbk@addedtopsepfalse  % 一番上のアキをまだ開けてない
+\sbk@split\sbk@addskipdp
 \ifvoid\sbk@bxb      % Only one line
-\def\sbk@fstln{\sbk@addfsepdp
+\def\sbk@fstln{\sbk@addfsepht\sbk@addfsepdp
 \vbox{\hrule\@height\sbreakboxrule\sbk@line\hrule\@height\sbreakboxrule}}%
 \else               % More than one line
-\def\sbk@fstln{\vbox{\hrule\@height\sbreakboxrule\sbk@line}\hfil
-\advance\sbk@lcnt\@ne
+\def\sbk@fstln{%
+  \ifdim\ht\sbk@bxa=0pt % verbatimやallttでht=0ptが取れてくるのを無視
+  \else
+    \sbk@addfsepht % これは上のチェックの後でないといけない
+    \sbk@addedtopseptrue
+    \vbox{\hrule\@height\sbreakboxrule\sbk@line}\hfil
+    \advance\sbk@lcnt\@ne
+  \fi
 \loop 
  \sbk@split\sbk@addskipdp\leavevmode
 \ifvoid\sbk@bxb      % The last line
  \@sbkcontfalse\sbk@addfsepdp
  \vtop{\sbk@line\hrule\@height\sbreakboxrule}%
 \else               % 2,...,(n-1)
+ \ifsbk@addedtopsep\else\sbk@addfsepht\sbk@addedtopseptrue\fi
  \sbk@line
 \fi
  \hfil\advance\sbk@lcnt\@ne
